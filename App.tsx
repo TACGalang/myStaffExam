@@ -5,9 +5,10 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -15,7 +16,14 @@ import {
   Text,
   useColorScheme,
   View,
+  Dimensions,
+  PanResponder,
 } from 'react-native';
+import Video from 'react-native-video';
+import {createThumbnail} from 'react-native-create-thumbnail';
+import {thumbnailWidth} from './src/utils/utls';
+
+import {Preview} from './src/components/VideoPreviews/interfaces';
 
 import {
   Colors,
@@ -29,37 +37,72 @@ type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): JSX.Element {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+  const [previews, setPreviews] = useState<Preview[]>();
+  const videoDuration = useRef<number>();
+  const videoRef = useRef<Video | null>();
+  const thumbnailIterations = useRef<number>();
+  const windowWidth = Dimensions.get('window').width;
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [progress, setProgress] = useState(0.2);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        // Calculate the new progress based on gesture state
+        const newProgress = Math.max(0, Math.min(1, gestureState.moveX / 300));
+        setProgress(newProgress);
+        const actualVal = (videoDuration.current ?? 0) * (newProgress / 1);
+        videoRef.current?.seek(actualVal);
+      },
+    }),
+  ).current;
+
+  const videoUri =
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+
+  const getPreviews = async (stamps: number[]) => {
+    const completedPreviews = await Promise.all(
+      stamps.map(async stamp => {
+        return await generatePreviewThumbnail(stamp);
+      }),
+    );
+
+    setPreviews(completedPreviews);
+  };
+
+  const generatePreviewThumbnail = async (
+    timeStamp: number,
+  ): Promise<Preview> => {
+    try {
+      const thumbnail = await createThumbnail({
+        url: videoUri,
+        timeStamp,
+      });
+
+      return {timeStamp, thumbnail: thumbnail.path} as Preview;
+    } catch (error) {
+      return {timeStamp} as Preview;
+    }
+  };
+
+  const createTimeStamps = (videoLength: number) => {
+    thumbnailIterations.current = Math.trunc(windowWidth / thumbnailWidth);
+    const iterations = thumbnailIterations.current ?? 1;
+    const qoutient: number = videoLength / iterations;
+    var stamps: number[] = [];
+
+    for (let i = 1; i <= iterations; i++) {
+      stamps.push(qoutient * i * 1000);
+    }
+    getPreviews(stamps);
   };
 
   return (
@@ -71,30 +114,48 @@ function App(): JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
+        <Video
+          source={{uri: videoUri}}
+          ref={ref => {
+            videoRef.current = ref;
+          }}
+          resizeMode="contain"
+          controls={true}
+          style={{width: '100%', height: 200}}
+          onLoad={data => {
+            createTimeStamps(data.duration);
+            videoDuration.current = data.duration;
+            console.log('witdh', data.naturalSize.width);
+            console.log('window width', windowWidth);
+          }}
+          onProgress={data => {
+            const progressData =
+              ((data.currentTime / (videoDuration.current ?? 0)) * 100) / 100;
+            setProgress(progressData);
+          }}
+        />
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          {previews &&
+            previews.map(preview => (
+              <Image
+                key={preview.timeStamp}
+                source={{uri: preview.thumbnail}}
+                style={{flex: 1, width: 70, height: 40}}
+              />
+            ))}
+        </View>
         <View
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
+            width: `${progress * 100}%`,
+            height: 200,
+            backgroundColor: 'green',
+          }}
+          {...panResponder.panHandlers}
+        />
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   sectionContainer: {
