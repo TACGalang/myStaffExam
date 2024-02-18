@@ -18,6 +18,8 @@ import UIExam from './src/pages/UIExam';
 import NativeModuleExam from './src/pages/NativeModuleExam';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
+import AppNavigator from './src/navigation/AppNavigator';
+
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const {MoviesModule} = NativeModules;
@@ -35,7 +37,8 @@ const App = () => {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <NativeModuleExam />
+      {/* <NativeModuleExam /> */}
+      <AppNavigator />
     </SafeAreaView>
   );
 };
