@@ -4,6 +4,7 @@ import {useUIExam} from './hook';
 import {View, ScrollView, TouchableOpacity} from 'react-native';
 import Video from 'react-native-video';
 import BackgroundPreview from '../../components/VideoPreviews';
+import PlayOverlay from '../../components/PlayOverlay';
 
 import {Styles} from './styles';
 import {videoURL} from '../../utils/utls';
@@ -44,12 +45,10 @@ const UIExam = () => {
           onError={error => {
             console.log('ERR: ', error);
           }}
-          onLoadStart={() => {
-            console.log('LOADING START');
-          }}
           onProgress={data => onProgress(data.currentTime)}
           onEnd={() => onVideoEnd()}
         />
+        <PlayOverlay isPause={isPause} />
       </TouchableOpacity>
 
       {videoDuration.current && (

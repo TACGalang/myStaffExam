@@ -48,4 +48,9 @@ class MoviesModule: NSObject {
             description: "A musical drama special for the Apple TV+ members.")
     ]
   }
+  
+  @objc
+  static func requiresMainQueueSetup() -> Bool {
+      return true
+    }
 }
