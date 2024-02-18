@@ -20,12 +20,11 @@ import {
   PanResponder,
 } from 'react-native';
 import Video from 'react-native-video';
-import {createThumbnail} from 'react-native-create-thumbnail';
-import {thumbnailWidth} from './src/utils/utls';
 
 import {Preview} from './src/components/VideoPreviews/interfaces';
 
 import BackgroundPreview from './src/components/VideoPreviews';
+import UIExam from './src/pages/UIExam';
 
 import {
   Colors,
@@ -62,16 +61,15 @@ const App = () => {
     }),
   ).current;
 
-  const videoUri =
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    flexGrow: 1,
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
+      <UIExam />
+      {/* <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
@@ -85,7 +83,7 @@ const App = () => {
           }}
           resizeMode="contain"
           controls={true}
-          style={{width: '100%', height: 200}}
+          style={}
           onLoadStart={() => {
             console.log('load start');
           }}
@@ -116,7 +114,7 @@ const App = () => {
           }}
           {...panResponder.panHandlers}
         />
-      </ScrollView>
+      </ScrollView> */}
     </SafeAreaView>
   );
 };

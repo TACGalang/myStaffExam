@@ -4,7 +4,6 @@ import {thumbnailWidth} from '../../utils/utls';
 const Styles = () =>
   StyleSheet.create({
     container: {
-      flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-around',
       height: 40,
