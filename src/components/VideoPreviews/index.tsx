@@ -1,17 +1,29 @@
-import {Text, View} from 'react-native';
 import React from 'react';
 import {useBackgroundPreview} from './hook';
 
-import {BackgroundPreviewProps} from './interfaces';
-import styles from './styles';
+import {Image, View} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 
-const BackgroundPreview: React.FC<BackgroundPreviewProps> = ({
-  videoURL,
-  windowWith,
-}) => {
+import {BackgroundPreviewProps} from './interfaces';
+import Styles from './styles';
+
+const BackgroundPreview: React.FC<BackgroundPreviewProps> = props => {
+  const {previews} = useBackgroundPreview(props);
+  const styles = Styles();
+
   return (
-    <View>
-      <Text>ProgressBar</Text>
+    <View style={styles.container}>
+      {previews ? (
+        previews.map(preview => (
+          <Image
+            key={preview.timeStamp}
+            source={{uri: preview.thumbnail}}
+            style={styles.image}
+          />
+        ))
+      ) : (
+        <ActivityIndicator />
+      )}
     </View>
   );
 };

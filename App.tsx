@@ -25,6 +25,8 @@ import {thumbnailWidth} from './src/utils/utls';
 
 import {Preview} from './src/components/VideoPreviews/interfaces';
 
+import BackgroundPreview from './src/components/VideoPreviews';
+
 import {
   Colors,
   DebugInstructions,
@@ -39,12 +41,11 @@ type SectionProps = PropsWithChildren<{
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [previews, setPreviews] = useState<Preview[]>();
+
   const videoDuration = useRef<number>();
   const videoRef = useRef<Video | null>();
-  const thumbnailIterations = useRef<number>();
-  const windowWidth = Dimensions.get('window').width;
 
+  const windowWidth = Dimensions.get('window').width;
   const [progress, setProgress] = useState(0.2);
 
   const panResponder = useRef(
@@ -68,43 +69,6 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  const getPreviews = async (stamps: number[]) => {
-    const completedPreviews = await Promise.all(
-      stamps.map(async stamp => {
-        return await generatePreviewThumbnail(stamp);
-      }),
-    );
-
-    setPreviews(completedPreviews);
-  };
-
-  const generatePreviewThumbnail = async (
-    timeStamp: number,
-  ): Promise<Preview> => {
-    try {
-      const thumbnail = await createThumbnail({
-        url: videoUri,
-        timeStamp,
-      });
-
-      return {timeStamp, thumbnail: thumbnail.path} as Preview;
-    } catch (error) {
-      return {timeStamp} as Preview;
-    }
-  };
-
-  const createTimeStamps = (videoLength: number) => {
-    thumbnailIterations.current = Math.trunc(windowWidth / thumbnailWidth);
-    const iterations = thumbnailIterations.current ?? 1;
-    const qoutient: number = videoLength / iterations;
-    var stamps: number[] = [];
-
-    for (let i = 1; i <= iterations; i++) {
-      stamps.push(qoutient * i * 1000);
-    }
-    getPreviews(stamps);
-  };
-
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -122,8 +86,10 @@ const App = () => {
           resizeMode="contain"
           controls={true}
           style={{width: '100%', height: 200}}
+          onLoadStart={() => {
+            console.log('load start');
+          }}
           onLoad={data => {
-            createTimeStamps(data.duration);
             videoDuration.current = data.duration;
             console.log('witdh', data.naturalSize.width);
             console.log('window width', windowWidth);
@@ -134,16 +100,14 @@ const App = () => {
             setProgress(progressData);
           }}
         />
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          {previews &&
-            previews.map(preview => (
-              <Image
-                key={preview.timeStamp}
-                source={{uri: preview.thumbnail}}
-                style={{flex: 1, width: 70, height: 40}}
-              />
-            ))}
-        </View>
+        {videoDuration.current && (
+          <BackgroundPreview
+            videoDuration={videoDuration.current ?? 0}
+            videoURL={videoUri}
+            windowWidth={windowWidth}
+          />
+        )}
+
         <View
           style={{
             width: `${progress * 100}%`,

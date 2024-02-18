@@ -5,5 +5,6 @@ export interface Preview {
 
 export interface BackgroundPreviewProps {
   videoURL: string;
-  windowWith: number;
+  videoDuration: number;
+  windowWidth: number;
 }
