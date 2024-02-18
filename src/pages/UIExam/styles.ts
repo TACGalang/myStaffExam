@@ -24,5 +24,6 @@ export const Styles = (progress: number) =>
     videoContainer: {
       width: '100%',
       height: 200,
+      backgroundColor: 'black',
     },
   });

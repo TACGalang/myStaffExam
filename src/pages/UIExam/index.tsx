@@ -41,6 +41,12 @@ const UIExam = () => {
           onLoad={data => {
             videoDuration.current = data.duration;
           }}
+          onError={error => {
+            console.log('ERR: ', error);
+          }}
+          onLoadStart={() => {
+            console.log('LOADING START');
+          }}
           onProgress={data => onProgress(data.currentTime)}
           onEnd={() => onVideoEnd()}
         />

@@ -12,6 +12,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4AF458036DC3E88C5E42AD24 /* libPods-myStaffExam.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA208C2EA21158BAD4C55425 /* libPods-myStaffExam.a */; };
+		6AF0B1B22B823FEA0089A52E /* MoviesModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0B1B12B823FEA0089A52E /* MoviesModule.swift */; };
+		6AF0B1B42B8240A70089A52E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0B1B32B8240A70089A52E /* Movie.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D4066F27494D6311F75E8935 /* libPods-myStaffExam-myStaffExamTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35A1382C1CEA50166E6AE96E /* libPods-myStaffExam-myStaffExamTests.a */; };
 /* End PBXBuildFile section */
@@ -40,6 +42,9 @@
 		1E87639C91DB24B1B6DB9CCC /* Pods-myStaffExam.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myStaffExam.release.xcconfig"; path = "Target Support Files/Pods-myStaffExam/Pods-myStaffExam.release.xcconfig"; sourceTree = "<group>"; };
 		35A1382C1CEA50166E6AE96E /* libPods-myStaffExam-myStaffExamTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-myStaffExam-myStaffExamTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6E87B286131F4CE184E51A /* Pods-myStaffExam-myStaffExamTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myStaffExam-myStaffExamTests.release.xcconfig"; path = "Target Support Files/Pods-myStaffExam-myStaffExamTests/Pods-myStaffExam-myStaffExamTests.release.xcconfig"; sourceTree = "<group>"; };
+		6AF0B1B02B823FEA0089A52E /* myStaffExam-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "myStaffExam-Bridging-Header.h"; sourceTree = "<group>"; };
+		6AF0B1B12B823FEA0089A52E /* MoviesModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesModule.swift; sourceTree = "<group>"; };
+		6AF0B1B32B8240A70089A52E /* Movie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = myStaffExam/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83A3D188AEE256107915C7FE /* Pods-myStaffExam.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myStaffExam.debug.xcconfig"; path = "Target Support Files/Pods-myStaffExam/Pods-myStaffExam.debug.xcconfig"; sourceTree = "<group>"; };
 		EA208C2EA21158BAD4C55425 /* libPods-myStaffExam.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-myStaffExam.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,6 +97,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				6AF0B1B12B823FEA0089A52E /* MoviesModule.swift */,
+				6AF0B1B02B823FEA0089A52E /* myStaffExam-Bridging-Header.h */,
+				6AF0B1B32B8240A70089A52E /* Movie.m */,
 			);
 			name = myStaffExam;
 			sourceTree = "<group>";
@@ -207,7 +215,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1510;
 					};
 				};
 			};
@@ -414,6 +422,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				6AF0B1B42B8240A70089A52E /* Movie.m in Sources */,
+				6AF0B1B22B823FEA0089A52E /* MoviesModule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +442,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 109E03D72B70E610279C7B66 /* Pods-myStaffExam-myStaffExamTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -459,6 +470,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4D6E87B286131F4CE184E51A /* Pods-myStaffExam-myStaffExamTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = myStaffExamTests/Info.plist;
@@ -500,6 +512,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = myStaffExam;
+				SWIFT_OBJC_BRIDGING_HEADER = "myStaffExam-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -526,6 +539,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = myStaffExam;
+				SWIFT_OBJC_BRIDGING_HEADER = "myStaffExam-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
